@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     openai_api_key: str = Field(..., alias="OPENAI_API_KEY")
     tg_bot_token: str = Field(..., alias="TG_BOT_TOKEN")
 
+    log_level: str = Field(..., alias="LOG_LEVEL")
+
     model_config = SettingsConfigDict(
         env_file=os.path.join(os.path.abspath(os.path.dirname(__file__)), "..", ".env"),
         extra="ignore",

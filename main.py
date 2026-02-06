@@ -1,7 +1,18 @@
 from argparse import ArgumentParser
 import asyncio
 
+from aiogram import Bot, Dispatcher
+from aiogram.enums import ParseMode
+from aiogram.client.default import DefaultBotProperties
+
+from src.bot.routes import router
+from src.db import AsyncSessionLocal
+from src.middleware import DBMiddleware
 from src.parser import Parser
+from src.settings import settings
+from src.logging import configure_logging
+
+configure_logging(settings.log_level)
 
 
 async def main():
@@ -12,7 +23,20 @@ async def main():
         await Parser.parse(args.parse)
         return
 
-    print("bot start")
+    bot = Bot(
+        token=settings.tg_bot_token,
+        default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN_V2),
+    )
+
+    dispatcher = Dispatcher()
+    dispatcher.update.middleware(DBMiddleware(AsyncSessionLocal))
+    dispatcher.include_router(router)
+
+    try:
+        await bot.delete_webhook(drop_pending_updates=True)
+        await dispatcher.start_polling(bot)
+    finally:
+        await bot.session.close()
 
 
 if __name__ == "__main__":
