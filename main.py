@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 import asyncio
 
-from src.parser.parser import Parser
+from src.parser import Parser
 
 
 async def main():

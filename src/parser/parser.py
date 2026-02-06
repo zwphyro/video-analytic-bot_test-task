@@ -1,7 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.db import AsyncSessionLocal
-from src.models.video import Video
-from src.models.video_snapshot import VideoSnapshot
+from src.models import Video, VideoSnapshot
 from src.parser.schemas import VideoListSchema, VideoSchema, VideoSnapshotSchema
 
 
