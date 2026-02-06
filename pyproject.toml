@@ -8,6 +8,7 @@ dependencies = [
     "aiogram>=3.24.0",
     "alembic>=1.18.3",
     "asyncpg>=0.31.0",
+    "openai>=2.17.0",
     "pydantic>=2.12.5",
     "pydantic-settings>=2.12.0",
     "sqlalchemy>=2.0.46",

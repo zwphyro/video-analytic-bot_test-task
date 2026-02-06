@@ -4,10 +4,12 @@ import asyncio
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
+from openai import AsyncOpenAI
 
-from src.bot.routes import router
+from src.handlers.user import router
 from src.db import AsyncSessionLocal
-from src.middleware import DBMiddleware
+from src.middlewares.db_middleware import DBMiddleware
+from src.middlewares.llm_middleware import LLMMiddleware
 from src.parser import Parser
 from src.settings import settings
 from src.logging import configure_logging
@@ -23,6 +25,8 @@ async def main():
         await Parser.parse(args.parse)
         return
 
+    client = AsyncOpenAI(api_key=settings.openai_api_key)
+
     bot = Bot(
         token=settings.tg_bot_token,
         default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN_V2),
@@ -30,6 +34,7 @@ async def main():
 
     dispatcher = Dispatcher()
     dispatcher.update.middleware(DBMiddleware(AsyncSessionLocal))
+    dispatcher.update.middleware(LLMMiddleware(client))
     dispatcher.include_router(router)
 
     try:
