@@ -7,6 +7,7 @@ from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
 from openai import AsyncOpenAI
 
+from src.handlers.errors import register_error_handlers
 from src.handlers.user import router
 from src.db import AsyncSessionLocal
 from src.middlewares.db_middleware import DBMiddleware
@@ -38,6 +39,8 @@ async def main():
     dispatcher.update.middleware(DBMiddleware(AsyncSessionLocal))
     dispatcher.update.middleware(LLMMiddleware(client))
     dispatcher.include_router(router)
+
+    register_error_handlers(router)
 
     try:
         await bot.delete_webhook(drop_pending_updates=True)
