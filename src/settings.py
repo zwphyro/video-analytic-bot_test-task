@@ -12,9 +12,12 @@ class Settings(BaseSettings):
     db_password: str = Field(..., alias="POSTGRES_PASSWORD")
 
     openai_api_key: str = Field(..., alias="OPENAI_API_KEY", min_length=1)
+    openai_base_url: str | None = Field(None, alias="OPENAI_BASE_URL")
+    openai_model: str = Field(..., alias="OPENAI_MODEL")
+
     tg_bot_token: str = Field(..., alias="TG_BOT_TOKEN", min_length=1)
 
-    log_level: str = Field(..., alias="LOG_LEVEL")
+    log_level: str = Field("INFO", alias="LOG_LEVEL")
 
     model_config = SettingsConfigDict(
         env_file=os.path.join(os.path.abspath(os.path.dirname(__file__)), "..", ".env"),

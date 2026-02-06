@@ -2,6 +2,7 @@ from openai import AsyncOpenAI
 
 from src.exceptions import LLMException
 from src.prompts import SYSTEM_PROMPT
+from src.settings import settings
 
 
 class LLMService:
@@ -11,7 +12,7 @@ class LLMService:
     async def generate_sql_query(self, prompt: str):
         try:
             response = await self.client.chat.completions.create(
-                model="gpt-3.5-turbo",
+                model=settings.openai_model,
                 messages=[
                     {
                         "role": "system",

@@ -28,7 +28,9 @@ async def main():
         await Parser.parse(videos_json)
         return
 
-    client = AsyncOpenAI(api_key=settings.openai_api_key)
+    client = AsyncOpenAI(
+        base_url=settings.openai_base_url, api_key=settings.openai_api_key
+    )
 
     bot = Bot(
         token=settings.tg_bot_token,
