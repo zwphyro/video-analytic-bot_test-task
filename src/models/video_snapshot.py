@@ -20,4 +20,4 @@ class VideoSnapshot(Base):
     created_at: Mapped[created_at]
     updated_at: Mapped[updated_at]
 
-    video: Mapped["Video"] = relationship(back_populates="snapshots")
+    video: Mapped["Video"] = relationship(back_populates="snapshots")  # type: ignore[no-undefined-variable] # NOQA: F821

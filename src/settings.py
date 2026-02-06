@@ -24,4 +24,4 @@ class Settings(BaseSettings):
         )
 
 
-settings = Settings()  # type: ignore[reportCallIssue]
+settings = Settings()  # type: ignore[no-call-issue]

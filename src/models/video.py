@@ -2,7 +2,6 @@ from datetime import datetime
 from sqlalchemy import DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.db import Base, text_id, created_at, updated_at
-from src.models.video_snapshot import VideoSnapshot
 
 
 class Video(Base):
@@ -18,4 +17,4 @@ class Video(Base):
     created_at: Mapped[created_at]
     updated_at: Mapped[updated_at]
 
-    snapshots: Mapped[list["VideoSnapshot"]] = relationship(back_populates="video")
+    snapshots: Mapped[list["VideoSnapshot"]] = relationship(back_populates="video")  # type: ignore[no-undefined-variable] # NOQA: F821
