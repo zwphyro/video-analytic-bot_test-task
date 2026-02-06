@@ -1,8 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Annotated
 from sqlalchemy.ext.asyncio import AsyncAttrs, create_async_engine, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase, declared_attr, mapped_column
-from sqlalchemy import func
+from sqlalchemy import DateTime, func
 from re import sub
 
 from src.settings import settings
@@ -12,9 +12,16 @@ AsyncSessionLocal = async_sessionmaker(engine, expire_on_commit=False)
 
 
 text_id = Annotated[str, mapped_column(primary_key=True)]
-created_at = Annotated[datetime, mapped_column(server_default=func.now())]
+created_at = Annotated[
+    datetime, mapped_column(DateTime(timezone=True), server_default=func.now())
+]
 updated_at = Annotated[
-    datetime, mapped_column(server_default=func.now(), onupdate=datetime.now)
+    datetime,
+    mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=lambda: datetime.now(timezone.utc),
+    ),
 ]
 
 

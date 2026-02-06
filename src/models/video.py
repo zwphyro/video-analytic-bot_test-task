@@ -1,12 +1,14 @@
 from datetime import datetime
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy import DateTime
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.db import Base, text_id, created_at, updated_at
+from src.models.video_snapshot import VideoSnapshot
 
 
 class Video(Base):
     id: Mapped[text_id]
 
-    video_created_at: Mapped[datetime]
+    video_created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     views_count: Mapped[int]
     likes_count: Mapped[int]
     reports_count: Mapped[int]
