@@ -1,35 +1,38 @@
+import logging
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.db import AsyncSessionLocal
 from src.models import Video, VideoSnapshot
-from src.parser.schemas import VideoListSchema, VideoSchema, VideoSnapshotSchema
+from src.parser.schemas import VideoListSchema
+
+log = logging.getLogger(__name__)
 
 
 class Parser:
     @classmethod
-    async def parse(cls, file_path: str):
-        video_list = cls._validate(file_path)
+    async def parse(cls, videos_json: str):
+        video_list = VideoListSchema.model_validate_json(videos_json)
+        log.info(f"Video list with {len(video_list.videos)} videos was validated")
 
         async with AsyncSessionLocal() as session:
-            for video in video_list.videos:
-                await cls._add_video(video, session)
-                for snapshot in video.snapshots:
-                    await cls._add_snapshot(snapshot, session)
+            try:
+                log.info("Adding videos and snapshots to database...")
+                await cls._add(video_list, session)
+                await session.commit()
+                log.info("Successfully added videos and snapshots to database")
+
+            except Exception as error:
+                log.error(f"Failed to add videos list to database: {error}")
+                await session.rollback()
+                raise
 
     @classmethod
-    def _validate(cls, file_path: str):
-        with open(file_path, "r") as file:
-            content = file.read()
-
-        return VideoListSchema.model_validate_json(content)
-
-    @classmethod
-    async def _add_video(cls, video: VideoSchema, session: AsyncSession):
-        new_video = Video(**video.model_dump(exclude={"snapshots"}))
-        session.add(new_video)
-        await session.commit()
-
-    @classmethod
-    async def _add_snapshot(cls, snapshot: VideoSnapshotSchema, session: AsyncSession):
-        new_snapshot = VideoSnapshot(**snapshot.model_dump())
-        session.add(new_snapshot)
-        await session.commit()
+    async def _add(cls, video_list: VideoListSchema, session: AsyncSession):
+        for video in video_list.videos:
+            new_video = Video(
+                **video.model_dump(exclude={"snapshots"}),
+                snapshots=[
+                    VideoSnapshot(**snapshot.model_dump())
+                    for snapshot in video.snapshots
+                ],
+            )
+            session.add(new_video)

@@ -1,5 +1,6 @@
 from argparse import ArgumentParser
 import asyncio
+import sys
 
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
@@ -19,11 +20,11 @@ configure_logging(settings.log_level)
 
 async def main():
     argument_parser = ArgumentParser()
-    argument_parser.add_argument("--parse", type=str)
+    argument_parser.add_argument("--parse", action="store_true")
     args = argument_parser.parse_args()
     if args.parse:
-        print("hello")
-        # await Parser.parse(args.parse)
+        videos_json = sys.stdin.read()
+        await Parser.parse(videos_json)
         return
 
     client = AsyncOpenAI(api_key=settings.openai_api_key)
