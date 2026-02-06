@@ -11,8 +11,8 @@ class Settings(BaseSettings):
     db_user: str = Field(..., alias="POSTGRES_USER")
     db_password: str = Field(..., alias="POSTGRES_PASSWORD")
 
-    openai_api_key: str = Field(..., alias="OPENAI_API_KEY")
-    tg_bot_token: str = Field(..., alias="TG_BOT_TOKEN")
+    openai_api_key: str = Field(..., alias="OPENAI_API_KEY", min_length=1)
+    tg_bot_token: str = Field(..., alias="TG_BOT_TOKEN", min_length=1)
 
     log_level: str = Field(..., alias="LOG_LEVEL")
 

@@ -1,7 +1,7 @@
 [project]
 name = "video-analytic-bot-test-task"
 version = "0.1.0"
-description = "Add your description here"
+description = "Test task for RLT (https://docs.google.com/document/d/1XQSuK7jC5k_hrJ3KhkjWsD7BwzUvuP_HwKsbZuhAE8c/edit?tab=t.0)"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [

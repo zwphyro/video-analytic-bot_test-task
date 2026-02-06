@@ -22,7 +22,8 @@ async def main():
     argument_parser.add_argument("--parse", type=str)
     args = argument_parser.parse_args()
     if args.parse:
-        await Parser.parse(args.parse)
+        print("hello")
+        # await Parser.parse(args.parse)
         return
 
     client = AsyncOpenAI(api_key=settings.openai_api_key)
