@@ -72,7 +72,7 @@ docker exec -i analytic_app uv run main.py --parse < <путь к файлу>
 python main.py --parse < <путь к файлу>
 ```
 
-## Архитекртура
+## Архитектура
 
 Основной хэндлер сообщений находится в файле [`user.py`](src/handlers/user.py), сервисы передаются в хэндлер через [*middleware*](src/middlewares). [`LLMService`](src/services/llm_service.py) отвечает за отправку исходных сообщений пользователя в *LLM* через *OpenAI API*. [`DBService`](src/services/db_service.py) отвечает за отправку сгенерированных *SQL*-запросов в базу данных.  
 Промпт для *LLM* расположен в файле [`prompts.py`](src/prompts.py). Схема данных описывается с помощью *SQL*-схемы.
