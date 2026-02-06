@@ -69,7 +69,7 @@ docker exec -i analytic_app uv run main.py --parse < <путь к файлу>
 Если приложение может быть запущено локально:
 
 ```sh
-uv run main.py --parse < <путь к файлу>
+python main.py --parse < <путь к файлу>
 ```
 
 ## Архитекртура
